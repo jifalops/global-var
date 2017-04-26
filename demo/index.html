@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>global-var demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../global-var.html">
+    <link rel="import" href="../../paper-input/paper-input.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic global-var demo</h3>
+      <demo-snippet>
+        <template is="dom-bind">
+          <global-var name="var1" value="{{var1}}"></global-var>
+          <global-var name="var2" value="{{var2}}"></global-var>
+          <paper-input value="{{var1}}" label="var1 (read/write)"></paper-input>
+          <paper-input value="{{var2}}" label="var2 (read/write)"></paper-input>
+        </template>
+      </demo-snippet>
+      <demo-snippet>
+        <template is="dom-bind">
+          <global-var read-only name="var1" value="{{var1}}"></global-var>
+          <global-var read-only name="var2" value="{{var2}}"></global-var>
+          <paper-input value="{{var1}}" label="var1 (read-only)"></paper-input>
+          <paper-input value="{{var2}}" label="var2 (read-only)"></paper-input>
+        </template>
+      </demo-snippet>
+      <demo-snippet>
+        <template is="dom-bind">
+          <global-var name="var1" value="{{var1}}"></global-var>
+          <global-var name="var2" value="{{var2}}"></global-var>
+          <paper-input value="{{var1}}" label="var1 (read/write)"></paper-input>
+          <paper-input value="{{var2}}" label="var2 (read/write)"></paper-input>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

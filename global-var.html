@@ -1,0 +1,113 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`global-var`
+Light-weight element to expose global variables to Polymer data binding.
+
+@demo demo/index.html
+-->
+<dom-module id="global-var">
+  <script>
+    var jifalopsGlobalVar = jifalopsGlobalVar || {};
+    Polymer({
+      is: 'global-var',
+      properties: {
+        /**
+         * The statically defined name for this global variable.
+         * The name must be defined before attached is called.
+         * Changing the name before detach may cause errors.
+         */
+        name: String,
+        /**
+         * The value of the global variable with `name`.
+         * The namespace used internally is `jifalopsGlobalVar`.
+         */
+        value: {
+          type: Object,
+          notify: true,
+          observer: '_valueChanged'
+        },
+
+        /**
+         * Whether to disable changing the global variable
+         */
+        readOnly: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Whether to do verbose logging to the console.
+         */
+        log: {
+          type: Boolean,
+          value: false,
+        },
+      },
+
+      attached: function() {
+        if (this.name) {
+          if (jifalopsGlobalVar[this.name]) {
+            if (this.value != jifalopsGlobalVar[this.name].value) {
+              this.log && console.log('Changing value from:', this.value, ', to value from global:', jifalopsGlobalVar[this.name].value);
+              this.value = jifalopsGlobalVar[this.name].value;
+            }
+          } else {
+            jifalopsGlobalVar[this.name] = {
+              value: this.value,
+              observers: [this],
+              isChanging: false,
+            };
+          }
+          this.__observeGlobal(this.name);
+        } else {
+          throw new Error('Invalid Argument: The `name` property must be defined.');
+        }
+      },
+
+      detached: function() {
+        this.__unobserveGlobal(this.name);
+      },
+
+      _valueChanged: function(value, oldValue) {
+        if (!this.readOnly && value != oldValue
+            && jifalopsGlobalVar[this.name]
+            && value != jifalopsGlobalVar[this.name].value
+            && !jifalopsGlobalVar[this.name].isChanging) {
+          this.log && console.log('Updating global:', this.name, ', to:', value);
+          this.__setGlobal(this.name, value);
+        } else {
+          this.log && console.log('Not updating global:', this.name, ', to:', value);
+        }
+      },
+
+      __setGlobal: function(name, value) {
+        jifalopsGlobalVar[name].isChanging = true;
+        jifalopsGlobalVar[name].value = value;
+        for (var i in jifalopsGlobalVar[name].observers) {
+          if (jifalopsGlobalVar[name].observers[i] != this) {
+            this.log && console.log('Updating observer', i, name, ', to:', value);
+            jifalopsGlobalVar[name].observers[i].set('value', value);
+          }
+        }
+        jifalopsGlobalVar[name].isChanging = false;
+      },
+
+      __observeGlobal: function(name) {
+        var index = jifalopsGlobalVar[name].observers.indexOf(this);
+        if (index === -1) {
+          this.log && console.log('Observing changes to', name);
+          jifalopsGlobalVar[name].observers.push(this);
+        }
+      },
+
+      __unobserveGlobal: function(name) {
+        var index = jifalopsGlobalVar[name].observers.indexOf(this);
+        if (index !== -1) {
+          this.log && console.log('Not observing changes to', name);
+          jifalopsGlobalVar[name].observers.splice(index, 1);
+        }
+      },
+    });
+  </script>
+</dom-module>
