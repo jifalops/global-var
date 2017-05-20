@@ -12,36 +12,54 @@
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../global-var.html">
     <link rel="import" href="../../paper-input/paper-input.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../../polymer/lib/elements/custom-style.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
-    </style>
+    <custom-style>
+      <style include="demo-pages-shared-styles"></style>
+    </custom-style>
   </head>
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic global-var demo</h3>
       <demo-snippet>
-        <template is="dom-bind">
-          <global-var name="var1" value="{{var1}}"></global-var>
-          <global-var name="var2" value="{{var2}}"></global-var>
-          <paper-input value="{{var1}}" label="var1 (read/write)"></paper-input>
-          <paper-input value="{{var2}}" label="var2 (read/write)"></paper-input>
-        </template>
+        <dom-bind id="ex1">
+          <template>
+            <global-var name="string1" value="{{string1}}" log></global-var>
+            <global-var name="object1" value="{{object1}}" log></global-var>
+            <paper-input value="{{string1}}" label="string1 (read/write)"></paper-input>
+            <paper-input value="{{string2}}" label="object1 (read/write)"></paper-input>
+            <button on-click="updateObject">Update Object</button>
+            <script>
+              let ex1 = document.getElementById('ex1');
+              ex1.updateObject = e => ex1.object1 = JSON.parse(ex1.string2);
+            </script>
+          </template>
+        </dom-bind>
       </demo-snippet>
       <demo-snippet>
-        <template is="dom-bind">
-          <global-var read-only name="var1" value="{{var1}}"></global-var>
-          <global-var read-only name="var2" value="{{var2}}"></global-var>
-          <paper-input value="{{var1}}" label="var1 (read-only)"></paper-input>
-          <paper-input value="{{var2}}" label="var2 (read-only)"></paper-input>
-        </template>
+        <dom-bind id="ex2">
+          <template>
+            <global-var read-only name="string1" value="{{string1}}" log></global-var>
+            <global-var read-only name="object1" value="{{object1}}" log></global-var>
+            <paper-input value="{{string1}}" label="string1 (read-only)"></paper-input>
+            <paper-input value="{{object1}}" label="object1 (read-only)"></paper-input>
+            <script>
+              let ex2 = document.getElementById('ex2');
+              ex2.stringify = e => ex2.stringifiedObject1 = JSON.stringify(ex2.object1);
+            </script>
+          </template>
+        </dom-bind>
       </demo-snippet>
       <demo-snippet>
-        <template is="dom-bind">
-          <global-var name="var1" value="{{var1}}"></global-var>
-          <global-var name="var2" value="{{var2}}"></global-var>
-          <paper-input value="{{var1}}" label="var1 (read/write)"></paper-input>
-          <paper-input value="{{var2}}" label="var2 (read/write)"></paper-input>
-        </template>
+        <dom-bind>
+          <template>
+            <global-var name="string1" value="{{string1}}"></global-var>
+            <global-var name="object1" value="{{object1}}"></global-var>
+            <paper-input value="{{string1}}" label="string1 (read/write)"></paper-input>
+            <paper-input value="{{string2}}" label="object1 (read/write)"></paper-input>
+          </template>
+        </dom-bind>
       </demo-snippet>
     </div>
   </body>
